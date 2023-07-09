@@ -1,0 +1,141 @@
+
+> 2차 프로젝트에서 카카오 소셜 로그인을 구현하기에 앞서, 소셜 로그인 과정을 이해하는데 시간이 좀 필요했었던거 같다. 공식문서, 블로그등 많이 찾아보았지만 방법이 여러 가지라 어떤식으로 할지도 고민을 했었고 많이 배울 수 있었던 시간이었다. 아래는 내가 구현한 소셜 로그인 과정이다.
+
+
+
+
+##### 카카오 공식 문서 https://developers.kakao.com/docs/latest/ko/kakaologin/prerequisite
+
+
+
+
+
+### 소셜 로그인 과정
+
+> 1. 카카오로 로그인하기 버튼 눌러 로그인화면 띄우기
+2. 카카오에게 인가 코드 받아오기 / auth
+3. 인가코드는 주소의 쿼리스트링에 담아져서 제공된다. 이걸 다시 백엔드에게 전달한다.
+	-> 백엔드는 프론트에서 보내준 인가코드를 처리해 엑세스 토큰을 보내준다.
+4. 백엔드에서 받은 토큰을 로컬 스토리지에 저장해 로그인을 유지한다.
+
+
+
+#### 1. 카카오 소셜 로그인화면 띄우기
+'카카오로 로그인하기' 버튼을 누르면 카카오에서 제공하는 로그인 화면을 띄워줘야 한다.
+
+
+``` javascript
+// KakaoSocialLogin.jsx
+
+const KakaoSocialLogin = () => {
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+
+  const handleSocialLogin = () => {
+    window.location.href = KAKAO_AUTH_URL; // window.location.href를 이용해 파라미터에 있는 인가 코드를 가져온다.
+
+  };
+
+  return <KakaoLoginButton onClick={handleSocialLogin} />;
+};
+
+export default KakaoSocialLogin;
+
+```
+
+- 위의 `${REST_API_KEY} ${REDIRECT_URI}` 두 개의 키는 노출되면 안돼는 정보로 .env 파일에 저장하고 사용해야 한다.
+
+- 처음에는 `.env` 파일에 저장하고 push 하면 계속 git에 노출되었는데 이것도 아래처럼 캐시를 삭제한 후에야 해결 되었다.
+
+``` python
+git rm env --cached
+
+git commit -m "환경변수 캐시 삭제"
+```
+
+
+
+#### 2. 카카오에서 인가 코드 받아오기
+
+리다이렉션 페이지로 사용될 컴포넌트이다. 아래 코드들은 카카오에서 받은 인가코드를 백엔드에 넘겨주고 엑세스 토큰을 받는 과정이다.
+
+``` javascript
+
+// 카카오에서 인가코드 받는 과정
+
+  fetch(`https://kauth.kakao.com/oauth/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `grant_type=authorization_code&client_id=${process.env.REACT_APP_KAKAO_API_KEY}&redirect_uri=${REDIRECT_URI}&code=${KAKAO_CODE}`,
+    })
+      .then(res => res.json())
+      .then(data => {
+        const receivedAccessToken = data.access_token;
+        setAccessToken(receivedAccessToken);
+        exchangeKakaoToken(receivedAccessToken);
+      })
+      .catch(error => {
+        navigate('/');
+      });
+  }, []);
+
+  return (
+    <Background>
+      <LoadingMotion />
+      <LoadingText>Loading ...</LoadingText>
+    
+    // 여기에서 네트워크 환경이 느린 사용자들은 리다이렉팅 화면에 그대로 노출될 수 있기 때문에
+    // 로그인 과정에서 발생할 수 있는 대기 시간을 적극 활용하여 로딩 마이크로 애니메이션 페이지를 추가하였다.
+    
+    
+    </Background>
+  );
+};
+
+```
+
+#### 3. 인가코드를 백엔드에게 전달하기
+
+
+- 카카오에서 받은 인가코드를 백엔드에 넘겨주고, 백엔드에서 받은 엑세스 토큰을
+로컬스토리지에 저장하는 과정이다. 로그인이 성공하면 메인으로 이동하게 된다.
+
+```javascript
+
+//Auth.jsx
+
+... 앞 코드 생략
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body,
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const jwtToken = data.webToken;
+        window.localStorage.setItem('token', jwtToken);
+
+        navigate('/');
+      } else {
+      }
+    } catch (error) {}
+  };
+
+```
+
+
+
+
+> 아래는 소셜 로그인 구현 페이지이다.
+
+![](https://velog.velcdn.com/images/cinematicmomentz/post/edbc28c1-f762-451f-b041-c575c75c2ce5/image.png)
+
+> 카카오 로그인 버튼을 클릭하면 kakao 소셜 로그인 페이지로 넘어가게 된다.
+
+![](https://velog.velcdn.com/images/cinematicmomentz/post/8cb8dd21-4a96-4e5a-b409-5e809c9e8707/image.png)

@@ -1,0 +1,35 @@
+[
+
+  {
+    "title": "카카오 소셜 로그인 구현",
+    "description": "2차 프로젝트",
+    "date": "2023-05-21",
+    "category": "projects",
+    "path": "kakao-login",
+    "featured": true
+  },
+  {
+    "title": "장바구니 기능 구현",
+    "description": "1차 프로젝트",
+    "date": "2023-05-10",
+    "category": "projects",
+    "path": "cart",
+    "featured": true
+  },
+  {
+    "title": "rgb 프로젝트 회고록",
+    "description": "rgb 아트 큐레이팅 웹 사이트 프로젝트",
+    "date": "2023-05-10",
+    "category": "projects",
+    "path": "1st-project",
+    "featured": true
+  },
+  {
+    "title": "Next.js Dynamic Routing",
+    "description": "Next.js 개념정리",
+    "date": "2023-04-10",
+    "category": "frontend",
+    "path": "next-js-pro-tips",
+    "featured": true
+  }
+]
