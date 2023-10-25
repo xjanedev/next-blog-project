@@ -43,3 +43,10 @@ export default async function PostPage({ params: { slug } }: Props) {
     </article>
   );
 }
+
+export async function generateStaticParams() {
+  const posts = await getLatestPosts();
+  return posts.map(post => ({
+    slug: post.path,
+  }));
+}

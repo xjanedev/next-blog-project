@@ -18,13 +18,11 @@ export type PostData = Post & {
 };
 
 export async function getLatestPosts(): Promise<Post[]> {
-  return getAllPosts() //
-    .then(posts => posts.filter(post => post.featured));
+  return getAllPosts().then(posts => posts.filter(post => post.featured));
 }
 
 export async function getNonLatestPosts(): Promise<Post[]> {
-  return getAllPosts() //
-    .then(posts => posts.filter(post => !post.featured));
+  return getAllPosts().then(posts => posts.filter(post => !post.featured));
 }
 
 export const getAllPosts = cache(async () => {

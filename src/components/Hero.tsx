@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import profileImage from "../../public/profile.png";
+import profileImage from "../../public/profile2.jpeg";
 
 export default function Hero() {
   return (
@@ -16,8 +16,8 @@ export default function Hero() {
           />
         </div>
         <div className='ml-8 text-left'>
-          <h2 className='text-2xl font-bold mt-4'>SL</h2>
-          <h3 className='text-xl font-400'>Frontend Dev</h3>
+          <h2 className='text-xl font-bold mt-4'>blue</h2>
+          <h3 className='text-md font-400'>frontend developer</h3>
         </div>
       </div>
       <hr className='mt-14 border-gray-300' />

@@ -12,7 +12,7 @@ export default function MarkdownViewer({ content }: { content: string }) {
   return (
     <ReactMarkdown
       rehypePlugins={[rehypeRaw]}
-      className='prose max-w-none item-center text-gray-900 dark:text-gray-100'
+      className='prose max-w-none item-center text-gray-800 dark:text-gray-100'
       remarkPlugins={[remarkGfm]}
       components={{
         code({ node, inline, className, children, ...props }) {

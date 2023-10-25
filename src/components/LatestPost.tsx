@@ -11,12 +11,9 @@ const cp = Courier_Prime({
 export default async function LatestPost() {
   const posts = await getLatestPosts();
   return (
-    // 1. 모든 포스트 데이터를 읽어와야 함
-    // 2. 모든 포스트 데이터를 보여줌
     <section>
       <div className={cp.className}>
-        <h2 className='text-2xl mt-6 mb-8'>* Latest Posts</h2>
-        {/* // hover시 컬러 체인지 */}
+        <h2 className='text-xl mt-6 mb-4'>latest posts!</h2>
       </div>
       <PostGrid posts={posts} />
     </section>

@@ -7,7 +7,7 @@ export default function Header() {
     <section className='flex justify-center pt-16 pl-16 pr-16'>
       <header className='flex justify-between items-center max-w-4xl w-full'>
         <Link href='/'>
-          <h1 className='text-3xl font-bold'>{"My-log"}</h1>
+          <h1 className='text-md'>{"devlog"}</h1>
         </Link>
         <nav className='flex gap-4'>
           <DarkMode />
